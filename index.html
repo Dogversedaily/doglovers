@@ -1,170 +1,231 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Dog Lovers Hub - Your Complete Dog Care Resource</title>
-    <link rel="stylesheet" href="styles.css">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LoveDogs.online – Free Dog Lovers Bundle 🐶❤️</title>
+  <meta name="description" content="Unlock your FREE Dog Lovers Bundle: HD wallpapers, emotional quotes, personality test, care & training mini-guides. Made for real dog lovers.">
+  <link rel="stylesheet" href="styles.css" />
 </head>
 <body>
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="container">
-            <div class="logo">
-                <h1>🐕 Dog Lovers Hub</h1>
-            </div>
-            <ul class="nav-links">
-                <li><a href="#home">Home</a></li>
-                <li><a href="#breeds">Breeds</a></li>
-                <li><a href="#care">Care Tips</a></li>
-                <li><a href="#blog">Blog</a></li>
-                <li><a href="#contact">Contact</a></li>
-            </ul>
-            <div class="hamburger">
-                <span></span>
-                <span></span>
-                <span></span>
-            </div>
-        </div>
-    </nav>
 
-    <!-- Hero Section -->
+  <!-- Header / Navbar -->
+  <header class="site-header">
+    <div class="container nav-container">
+      <div class="logo">
+        LoveDogs<span>.online</span>
+      </div>
+      <nav class="main-nav">
+        <a href="#home">Home</a>
+        <a href="#bundle">Bundle</a>
+        <a href="#how-it-works">How it works</a>
+        <a href="#faq">FAQ</a>
+        <a href="#contact">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main>
+
+    <!-- Hero -->
     <section id="home" class="hero">
-        <div class="hero-content">
-            <h2>Welcome to Dog Lovers Hub</h2>
-            <p>Your ultimate resource for dog care, training, and everything canine</p>
-            <button class="cta-button">Explore Now</button>
+      <div class="container hero-inner">
+        <div class="hero-text">
+          <p class="hero-badge">FREE for real dog lovers 🐾</p>
+          <h1>Get Your <span>Dog Lovers Bundle</span> – 100% Free</h1>
+          <p class="hero-subtitle">
+            15 HD wallpapers, 20 emotional quote posts, a fun personality test, 
+            a training cheat sheet, and a mini guide: <strong>7 signs your dog truly loves you.</strong>
+          </p>
+          <button class="cta-button" onclick="openLocker()">
+            Unlock the Dog Lovers Bundle
+          </button>
+          <p class="hero-note">
+            Free access available after a quick verification step.
+          </p>
         </div>
+        <div class="hero-card">
+          <div class="hero-card-inner">
+            <p class="hero-card-title">What you’ll get inside 🐶</p>
+            <ul class="hero-list">
+              <li>📱 15 mobile HD dog wallpapers</li>
+              <li>❤️ 20 emotional dog quote images</li>
+              <li>🧠 Dog personality test (mobile PDF)</li>
+              <li>📘 Training & care mini-sheets</li>
+            </ul>
+            <button class="secondary-button" onclick="openLocker()">
+              Get it now – It’s free
+            </button>
+          </div>
+        </div>
+      </div>
     </section>
 
-    <!-- Features Section -->
-    <section class="features">
-        <div class="container">
-            <h2 class="section-title">What We Offer</h2>
-            <div class="features-grid">
-                <div class="feature-card">
-                    <div class="icon">🐾</div>
-                    <h3>Breed Information</h3>
-                    <p>Comprehensive guides on hundreds of dog breeds, their traits, and characteristics</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon">🎓</div>
-                    <h3>Training Tips</h3>
-                    <p>Expert training techniques to help your dog become the best companion</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon">🏥</div>
-                    <h3>Health & Care</h3>
-                    <p>Essential health tips and care guidelines for your furry friend</p>
-                </div>
-                <div class="feature-card">
-                    <div class="icon">🍖</div>
-                    <h3>Nutrition Guide</h3>
-                    <p>Learn about proper nutrition and diet plans for different breeds and ages</p>
-                </div>
-            </div>
+    <!-- Bundle Preview -->
+    <section id="bundle" class="bundle-preview">
+      <div class="container">
+        <h2 class="section-title">What’s Inside Your Free Bundle</h2>
+        <p class="section-subtitle">
+          Everything is designed in a warm, emotional style using real dog photos – 
+          ready for your phone, social media, and daily dog-love moments.
+        </p>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="icon">📱</div>
+            <h3>15 HD Wallpapers</h3>
+            <p>Vertical 1080×1920 wallpapers with huskies, shelter dogs and small fluffy dogs in cozy lighting.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">❤️</div>
+            <h3>20 Quote Posts</h3>
+            <p>Emotional dog quotes with real dog photos, perfect for stories and posts.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">🧠</div>
+            <h3>Personality Test</h3>
+            <p>Mobile-friendly test to discover if your dog is a Protector, Happy Player or Loyal Shadow.</p>
+          </div>
+          <div class="feature-card">
+            <div class="icon">📘</div>
+            <h3>Guides & Cheat Sheet</h3>
+            <p>Mini training cheat sheet & “7 signs your dog loves you” guide for better bonding.</p>
+          </div>
         </div>
+
+        <div class="bundle-cta">
+          <button class="cta-button" onclick="openLocker()">
+            Unlock the Dog Lovers Bundle
+          </button>
+          <p class="small-note">
+            After verification, you’ll be redirected to a download page (Google Drive folder) with all files.
+          </p>
+        </div>
+      </div>
     </section>
 
-    <!-- Popular Breeds Section -->
-    <section id="breeds" class="breeds">
-        <div class="container">
-            <h2 class="section-title">Popular Dog Breeds</h2>
-            <div class="breeds-grid">
-                <div class="breed-card">
-                    <div class="breed-image">🦮</div>
-                    <h3>Golden Retriever</h3>
-                    <p>Friendly, intelligent, and devoted companions perfect for families</p>
-                    <button class="learn-more">Learn More</button>
-                </div>
-                <div class="breed-card">
-                    <div class="breed-image">🐕‍🦺</div>
-                    <h3>German Shepherd</h3>
-                    <p>Loyal, confident, and courageous working dogs with strong instincts</p>
-                    <button class="learn-more">Learn More</button>
-                </div>
-                <div class="breed-card">
-                    <div class="breed-image">🐩</div>
-                    <h3>Poodle</h3>
-                    <p>Intelligent, elegant, and hypoallergenic dogs in various sizes</p>
-                    <button class="learn-more">Learn More</button>
-                </div>
-                <div class="breed-card">
-                    <div class="breed-image">🐕</div>
-                    <h3>Labrador</h3>
-                    <p>Outgoing, even-tempered, and gentle family dogs with high energy</p>
-                    <button class="learn-more">Learn More</button>
-                </div>
-            </div>
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+      <div class="container">
+        <h2 class="section-title">How It Works</h2>
+
+        <div class="steps-grid">
+          <div class="step-card">
+            <div class="step-number">1</div>
+            <h3>Tap “Unlock Bundle”</h3>
+            <p>You’ll be redirected to a secure verification page managed by our partner.</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">2</div>
+            <h3>Complete a Quick Step</h3>
+            <p>Follow the on-screen instructions (simple verification – takes a short moment).</p>
+          </div>
+          <div class="step-card">
+            <div class="step-number">3</div>
+            <h3>Instant Access</h3>
+            <p>Once done, you’re redirected to the Dog Lovers Bundle download page.</p>
+          </div>
         </div>
+
+        <div class="how-cta">
+          <button class="secondary-button" onclick="openLocker()">
+            Start Verification & Get the Bundle
+          </button>
+        </div>
+      </div>
     </section>
 
-    <!-- Care Tips Section -->
-    <section id="care" class="care-tips">
-        <div class="container">
-            <h2 class="section-title">Essential Care Tips</h2>
-            <div class="tips-container">
-                <div class="tip-card">
-                    <h3>Daily Exercise</h3>
-                    <p>Regular physical activity is crucial for your dog's physical and mental health. Most dogs need 30-60 minutes of exercise daily.</p>
-                </div>
-                <div class="tip-card">
-                    <h3>Regular Grooming</h3>
-                    <p>Brush your dog regularly, trim nails, clean ears, and maintain dental hygiene to keep them healthy and comfortable.</p>
-                </div>
-                <div class="tip-card">
-                    <h3>Proper Nutrition</h3>
-                    <p>Feed high-quality dog food appropriate for your dog's age, size, and activity level. Always provide fresh water.</p>
-                </div>
-                <div class="tip-card">
-                    <h3>Veterinary Care</h3>
-                    <p>Schedule regular check-ups, keep vaccinations current, and address health concerns promptly with your vet.</p>
-                </div>
-            </div>
+    <!-- Trust / Why Bundle -->
+    <section class="why-bundle">
+      <div class="container why-inner">
+        <div class="why-text">
+          <h2 class="section-title">Made by Dog Lovers, for Dog Lovers</h2>
+          <p>
+            This bundle was created for people who see their dog as family.  
+            Every wallpaper, quote, and page was designed to celebrate the love, loyalty, and connection 
+            between you and your dog.
+          </p>
+          <p>
+            You can use the content for your phone, social media, personal inspiration, or to share 
+            love with other dog parents.
+          </p>
+          <button class="cta-button" onclick="openLocker()">
+            I Want My Free Bundle
+          </button>
         </div>
+        <div class="why-box">
+          <p class="why-box-title">What dog owners say:</p>
+          <ul class="why-list">
+            <li>“The wallpapers made me cry in a good way.”</li>
+            <li>“The personality test was so accurate for my dog.”</li>
+            <li>“I used the quotes for my Instagram and people loved them.”</li>
+          </ul>
+        </div>
+      </div>
     </section>
 
-    <!-- Newsletter Section -->
-    <section class="newsletter">
-        <div class="container">
-            <h2>Stay Updated</h2>
-            <p>Subscribe to our newsletter for the latest tips, tricks, and dog care advice</p>
-            <form class="newsletter-form">
-                <input type="email" placeholder="Enter your email" required>
-                <button type="submit">Subscribe</button>
-            </form>
+    <!-- FAQ -->
+    <section id="faq" class="faq">
+      <div class="container">
+        <h2 class="section-title">Frequently Asked Questions</h2>
+
+        <div class="faq-item">
+          <h3>Is the Dog Lovers Bundle really free?</h3>
+          <p>
+            Yes. The bundle is 100% free. To keep it free, we use a simple verification step through a trusted partner.
+          </p>
         </div>
+
+        <div class="faq-item">
+          <h3>What happens when I click “Unlock the Bundle”?</h3>
+          <p>
+            You’ll be redirected to a verification page. After completing the step shown, you’ll be redirected back 
+            to a download page (Google Drive folder) with all the bundle content.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Do I need to install anything?</h3>
+          <p>
+            No software is required. You just download the images and PDFs, then use them on your phone or computer.
+          </p>
+        </div>
+
+        <div class="faq-item">
+          <h3>Can I share the bundle with friends?</h3>
+          <p>
+            Yes, you can share the wallpapers and quotes with other dog lovers. We appreciate if you also share 
+            the link to <strong>LoveDogs.online</strong> so they can unlock it too.
+          </p>
+        </div>
+      </div>
     </section>
 
-    <!-- Footer -->
-    <footer id="contact">
-        <div class="container">
-            <div class="footer-content">
-                <div class="footer-section">
-                    <h3>Dog Lovers Hub</h3>
-                    <p>Your trusted source for all things dog-related</p>
-                </div>
-                <div class="footer-section">
-                    <h3>Quick Links</h3>
-                    <ul>
-                        <li><a href="#home">Home</a></li>
-                        <li><a href="#breeds">Breeds</a></li>
-                        <li><a href="#care">Care Tips</a></li>
-                        <li><a href="#blog">Blog</a></li>
-                    </ul>
-                </div>
-                <div class="footer-section">
-                    <h3>Contact Us</h3>
-                    <p>Email: info@doglovershub.com</p>
-                    <p>Phone: (555) 123-4567</p>
-                </div>
-            </div>
-            <div class="footer-bottom">
-                <p>&copy; 2025 Dog Lovers Hub. All rights reserved.</p>
-            </div>
+    <!-- Contact -->
+    <section id="contact" class="contact">
+      <div class="container contact-inner">
+        <div>
+          <h2 class="section-title">Contact</h2>
+          <p>If you have a question about the Dog Lovers Bundle or a suggestion, feel free to reach out.</p>
         </div>
-    </footer>
+        <div class="contact-details">
+          <p><strong>Email:</strong> <a href="mailto:hello@lovedogs.online">hello@lovedogs.online</a></p>
+        </div>
+      </div>
+    </section>
 
-    <script src="script.js"></script>
+  </main>
+
+  <!-- Footer -->
+  <footer class="site-footer">
+    <div class="container footer-inner">
+      <p>&copy; <span id="year"></span> LoveDogs.online. All rights reserved.</p>
+      <p class="footer-note">
+        This site may use third-party verification and promotional partners to keep the content free.
+      </p>
+    </div>
+  </footer>
+
+  <script src="script.js"></script>
 </body>
 </html>
