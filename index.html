@@ -1,233 +1,700 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="fr">
 <head>
-  <meta charset="UTF-8">
-  <meta
-    name="viewport"
-    content="width=device-width, initial-scale=1, viewport-fit=cover"
-  >
-  <title>Dog Lovers Hub — Dog care, training, breeds, and tips</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Leaders - Maintenance project group</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- SheetJS -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.18.5/xlsx.full.min.js"></script>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-datalabels@2.0.0"></script>
+    <!-- Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700;900&display=swap" rel="stylesheet">
 
-  <!-- SEO basics -->
-  <meta name="description" content="Dog Lovers Hub is your trusted home for dog care, training tips, breed guides, nutrition advice, and heartfelt stories.">
-  <link rel="canonical" href="https://ilovedogs.online/">
+    <style>
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; -webkit-print-color-adjust: exact; }
+        .fade-in { animation: fadeIn 0.5s ease-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+        @keyframes spin-slow { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        .logo-spin { animation: spin-slow 12s linear infinite; }
+        
+        /* Animation Alerte Rouge */
+        @keyframes flashRed {
+            0% { background-color: #ef4444; box-shadow: 0 0 0 0 rgba(239, 68, 68, 0.7); }
+            50% { background-color: #dc2626; box-shadow: 0 0 20px 10px rgba(239, 68, 68, 0); }
+            100% { background-color: #ef4444; box-shadow: 0 0 0 0 rgba(239, 68, 68, 0); }
+        }
+        .alert-mode { animation: flashRed 1s infinite; }
 
-  <!-- Social sharing -->
-  <meta property="og:title" content="Dog Lovers Hub — Your complete dog care resource">
-  <meta property="og:description" content="Explore training tips, breed guides, nutrition advice, and more.">
-  <meta property="og:type" content="website">
-  <meta property="og:image" content="https://ilovedogs.online/assets/og-image.jpg">
-  <meta property="og:url" content="https://ilovedogs.online/">
-  <meta name="twitter:card" content="summary_large_image">
-
-  <!-- Prefers color scheme and reduced motion respected in CSS -->
-  <link rel="stylesheet" href="styles.css">
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.4s ease-out; }
+        
+        /* Mobile Logic */
+        body.mobile-mode aside, body.mobile-mode header, body.mobile-mode .desktop-only { display: none !important; }
+        body.mobile-mode main { padding: 0; background: #fff; height: 100vh; overflow: hidden; }
+        #real-mobile-view { display: none; height: 100vh; width: 100vw; background-color: #f8fafc; }
+        body.mobile-mode #real-mobile-view { display: block; }
+        
+        /* UI Elements */
+        .machine-select { background-color: #1e293b; color: white; border: 1px solid #334155; padding: 12px; border-radius: 12px; width: 100%; font-weight: 600; cursor: pointer; background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' fill='none' viewBox='0 0 20 20'%3e%3cpath stroke='%2394a3b8' stroke-linecap='round' stroke-linejoin='round' stroke-width='1.5' d='M6 8l4 4 4-4'/%3e%3c/svg%3e"); background-position: right 0.5rem center; background-repeat: no-repeat; background-size: 1.5em 1.5em; appearance: none; }
+        .nav-btn.active { background: linear-gradient(90deg, #2563eb 0%, #1d4ed8 100%); color: white; box-shadow: 0 4px 20px rgba(37, 99, 235, 0.3); border-left: 4px solid #93c5fd; }
+        .card-kpi { @apply bg-white p-6 rounded-2xl shadow-sm border border-slate-200 relative overflow-hidden transition hover:shadow-md; }
+        .smartphone { border: 12px solid #1e293b; border-radius: 30px; overflow: hidden; position: relative; background: #f1f5f9; box-shadow: 0 20px 50px -10px rgba(0,0,0,0.3); }
+        .smartphone-notch { position: absolute; top: 0; left: 50%; transform: translateX(-50%); width: 40%; height: 20px; background: #1e293b; border-bottom-left-radius: 10px; border-bottom-right-radius: 10px; z-index: 50; }
+        @media print { body * { visibility: hidden; } #printable-area, #printable-area * { visibility: visible; } #printable-area { position: absolute; left: 0; top: 0; width: 100%; height: 100%; display: flex; justify-content: center; align-items: center; border: none; box-shadow: none; } .no-print { display: none !important; } }
+    </style>
 </head>
-<body>
-  <!-- Navigation -->
-  <nav class="navbar" role="navigation" aria-label="Main">
-    <div class="container">
-      <a href="#home" class="logo" aria-label="Dog Lovers Hub home">
-        <h1>🐕 Dog Lovers Hub</h1>
-      </a>
+<body class="text-slate-800 h-screen flex flex-col md:flex-row overflow-hidden relative">
 
-      <button
-        class="hamburger"
-        aria-controls="primary-navigation"
-        aria-expanded="false"
-        aria-label="Toggle menu"
-      >
-        <span></span><span></span><span></span>
-      </button>
-
-      <ul id="primary-navigation" class="nav-links">
-        <li><a href="#home" data-nav>Home</a></li>
-        <li><a href="#breeds" data-nav>Breeds</a></li>
-        <li><a href="#care" data-nav>Care Tips</a></li>
-        <li><a href="#blog" data-nav>Blog</a></li>
-        <li><a href="#contact" data-nav>Contact</a></li>
-      </ul>
-    </div>
-  </nav>
-
-  <!-- Hero Section -->
-  <section id="home" class="hero" aria-label="Welcome">
-    <div class="hero-content container">
-      <h2>Welcome to Dog Lovers Hub</h2>
-      <p>Your ultimate resource for dog care, training, and everything canine.</p>
-      <button class="cta-button" data-scroll="#breeds">Explore Now</button>
-    </div>
-  </section>
-
-  <!-- Features Section -->
-  <section class="features" aria-labelledby="features-title">
-    <div class="container">
-      <h2 id="features-title" class="section-title">What We Offer</h2>
-      <div class="features-grid">
-        <article class="feature-card">
-          <div class="icon" aria-hidden="true">🐾</div>
-          <h3>Breed information</h3>
-          <p>Comprehensive guides on hundreds of dog breeds, their traits, and characteristics.</p>
-        </article>
-        <article class="feature-card">
-          <div class="icon" aria-hidden="true">🎓</div>
-          <h3>Training tips</h3>
-          <p>Expert training techniques to help your dog become the best companion.</p>
-        </article>
-        <article class="feature-card">
-          <div class="icon" aria-hidden="true">🏥</div>
-          <h3>Health & care</h3>
-          <p>Essential health tips and care guidelines for your furry friend.</p>
-        </article>
-        <article class="feature-card">
-          <div class="icon" aria-hidden="true">🍖</div>
-          <h3>Nutrition guide</h3>
-          <p>Diet plans and nutrition advice for different breeds and ages.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- Preview Gallery (thumbnails for trust + excitement) -->
-  <section class="preview" aria-labelledby="preview-title">
-    <div class="container">
-      <h2 id="preview-title" class="section-title">Preview the bundle</h2>
-      <div class="preview-grid">
-        <!-- Replace src with real assets and add loading="lazy" -->
-        <figure class="preview-card">
-          <img src="assets/wallpapers/wallpaper-1.jpg" alt="Calm golden retriever at sunset" loading="lazy" decoding="async">
-          <figcaption>HD Wallpaper</figcaption>
-        </figure>
-        <figure class="preview-card">
-          <img src="assets/quotes/quote-1.jpg" alt="Inspiring dog quote post" loading="lazy" decoding="async">
-          <figcaption>Quote Post</figcaption>
-        </figure>
-        <figure class="preview-card">
-          <img src="assets/wallpapers/wallpaper-2.jpg" alt="Playful puppy close-up" loading="lazy" decoding="async">
-          <figcaption>HD Wallpaper</figcaption>
-        </figure>
-        <figure class="preview-card">
-          <img src="assets/quotes/quote-2.jpg" alt="Heartfelt dog quote post" loading="lazy" decoding="async">
-          <figcaption>Quote Post</figcaption>
-        </figure>
-      </div>
-      <div class="preview-cta">
-        <button class="cta-button" data-scroll="#newsletter">Unlock Free Bundle</button>
-        <button class="ghost-button" data-open="verification-info">What’s the verification step?</button>
-      </div>
-      <div id="verification-info" class="info-modal" aria-hidden="true" role="dialog" aria-labelledby="info-title">
-        <div class="info-content">
-          <h3 id="info-title">Why we ask for a quick verification</h3>
-          <p>This keeps downloads fast, blocks bots, and lets us offer the bundle for free to real dog lovers.</p>
-          <button class="close-info" data-close="verification-info">Got it</button>
+    <!-- BARRE D'ALERTE SUPERVISION -->
+    <div id="global-alert-bar" class="absolute top-0 left-0 w-full z-[100] hidden">
+        <div class="alert-mode text-white p-6 flex justify-between items-center shadow-2xl border-b-4 border-red-900">
+            <div class="flex items-center gap-6">
+                <div class="bg-white text-red-600 rounded-full p-3 animate-bounce">
+                    <i class="fa-solid fa-triangle-exclamation text-3xl"></i>
+                </div>
+                <div>
+                    <h2 class="text-3xl font-black uppercase tracking-widest">ALERTE PANNE DÉTECTÉE !</h2>
+                    <p class="text-lg font-bold opacity-90">Système : <span id="alert-machine-name" class="underline">--</span> | Signalé par : Opérateur Terrain</p>
+                </div>
+            </div>
+            <div class="flex gap-4">
+                <button onclick="acknowledgeAlert()" class="bg-white text-red-600 px-8 py-4 rounded-xl font-black text-xl hover:bg-red-50 transition shadow-lg flex items-center gap-2">
+                    <i class="fa-solid fa-check-circle"></i> ACQUITTER
+                </button>
+            </div>
         </div>
-      </div>
     </div>
-  </section>
 
-  <!-- Popular Breeds Section -->
-  <section id="breeds" class="breeds" aria-labelledby="breeds-title">
-    <div class="container">
-      <h2 id="breeds-title" class="section-title">Popular Dog Breeds</h2>
-      <div class="breeds-grid">
-        <article class="breed-card">
-          <div class="breed-image" aria-hidden="true">🦮</div>
-          <h3>Golden Retriever</h3>
-          <p>Friendly, intelligent, and devoted companions perfect for families.</p>
-          <button class="learn-more" aria-label="Learn more about Golden Retrievers">Learn More</button>
-        </article>
-        <article class="breed-card">
-          <div class="breed-image" aria-hidden="true">🐕‍🦺</div>
-          <h3>German Shepherd</h3>
-          <p>Loyal, confident, and courageous working dogs with strong instincts.</p>
-          <button class="learn-more" aria-label="Learn more about German Shepherds">Learn More</button>
-        </article>
-        <article class="breed-card">
-          <div class="breed-image" aria-hidden="true">🐩</div>
-          <h3>Poodle</h3>
-          <p>Intelligent, elegant, and hypoallergenic dogs in various sizes.</p>
-          <button class="learn-more" aria-label="Learn more about Poodles">Learn More</button>
-        </article>
-        <article class="breed-card">
-          <div class="breed-image" aria-hidden="true">🐕</div>
-          <h3>Labrador</h3>
-          <p>Outgoing, even-tempered, and gentle family dogs with high energy.</p>
-          <button class="learn-more" aria-label="Learn more about Labradors">Learn More</button>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- Care Tips Section -->
-  <section id="care" class="care-tips" aria-labelledby="care-title">
-    <div class="container">
-      <h2 id="care-title" class="section-title">Essential Care Tips</h2>
-      <div class="tips-container">
-        <article class="tip-card">
-          <h3>Daily exercise</h3>
-          <p>Regular physical activity supports physical and mental health. Most dogs need 30–60 minutes daily.</p>
-        </article>
-        <article class="tip-card">
-          <h3>Regular grooming</h3>
-          <p>Brush, trim nails, clean ears, and maintain dental hygiene to keep them healthy and comfortable.</p>
-        </article>
-        <article class="tip-card">
-          <h3>Proper nutrition</h3>
-          <p>Feed high-quality food appropriate for age, size, and activity level. Always provide fresh water.</p>
-        </article>
-        <article class="tip-card">
-          <h3>Veterinary care</h3>
-          <p>Schedule regular check-ups, keep vaccinations current, and address health concerns promptly.</p>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- Newsletter Section -->
-  <section id="newsletter" class="newsletter" aria-labelledby="newsletter-title">
-    <div class="container">
-      <h2 id="newsletter-title">Stay Updated</h2>
-      <p>Subscribe for the latest tips, tricks, and dog care advice.</p>
-      <form class="newsletter-form" novalidate aria-label="Newsletter form">
-        <label class="sr-only" for="email">Email address</label>
-        <input id="email" name="email" type="email" placeholder="Enter your email" autocomplete="email" required>
-        <button type="submit">Subscribe</button>
-        <p class="form-message" aria-live="polite"></p>
-      </form>
-    </div>
-  </section>
-
-  <!-- Footer -->
-  <footer id="contact" aria-labelledby="footer-title">
-    <div class="container">
-      <h2 id="footer-title" class="sr-only">Footer</h2>
-      <div class="footer-content">
-        <section class="footer-section">
-          <h3>Dog Lovers Hub</h3>
-          <p>Your trusted source for all things dog-related.</p>
-          <button class="ghost-button" id="theme-toggle" aria-pressed="false" aria-label="Toggle dark mode">Toggle dark mode</button>
-        </section>
-        <nav class="footer-section" aria-label="Footer links">
-          <h3>Quick Links</h3>
-          <ul>
-            <li><a href="#home" data-nav>Home</a></li>
-            <li><a href="#breeds" data-nav>Breeds</a></li>
-            <li><a href="#care" data-nav>Care Tips</a></li>
-            <li><a href="#blog" data-nav>Blog</a></li>
-          </ul>
+    <!-- SIDEBAR -->
+    <aside class="w-full md:w-72 bg-[#0f172a] text-white flex-shrink-0 flex flex-col h-screen relative z-40 shadow-2xl desktop-only">
+        <div class="p-8 border-b border-slate-800">
+            <div class="flex items-center gap-4 mb-8">
+                <div class="relative w-12 h-12 flex items-center justify-center bg-gradient-to-br from-blue-600 to-blue-800 rounded-xl shadow-lg shadow-blue-500/20"><i class="fa-solid fa-gear text-2xl text-white logo-spin"></i></div>
+                <div><h1 class="text-2xl font-black tracking-tighter text-white leading-none">LEAD<span class="text-blue-500">ERS</span></h1><p class="text-[10px] text-slate-400 uppercase tracking-[0.25em] font-bold mt-1">Maintenance project group</p></div>
+            </div>
+            <label class="text-[10px] text-slate-500 uppercase font-bold mb-2 block tracking-wider">Périmètre</label>
+            <select id="machine-select" onchange="changeMachine()" class="machine-select hover:border-blue-500 transition"></select>
+        </div>
+        <nav class="p-4 space-y-2 flex-1 overflow-y-auto">
+            <button onclick="switchTab('dashboard')" id="btn-dashboard" class="nav-btn active w-full text-left px-4 py-3.5 rounded-xl transition flex items-center gap-3 text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white"><i class="fa-solid fa-chart-pie w-5 text-center"></i> Tableau de Bord</button>
+            <button onclick="switchTab('qr')" id="btn-qr" class="nav-btn w-full text-left px-4 py-3.5 rounded-xl transition flex items-center gap-3 text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white"><i class="fa-solid fa-qrcode w-5 text-center"></i> Connexion Terrain</button>
+            <button onclick="switchTab('methods')" id="btn-methods" class="nav-btn w-full text-left px-4 py-3.5 rounded-xl transition flex items-center gap-3 text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white"><i class="fa-solid fa-list-check w-5 text-center"></i> AMDEC & Plan</button>
+            <button onclick="switchTab('stock')" id="btn-stock" class="nav-btn w-full text-left px-4 py-3.5 rounded-xl transition flex items-center gap-3 text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white"><i class="fa-solid fa-boxes-stacked w-5 text-center"></i> Stock Pièces</button>
+            <button onclick="switchTab('history')" id="btn-history" class="nav-btn w-full text-left px-4 py-3.5 rounded-xl transition flex items-center gap-3 text-sm font-medium text-slate-400 hover:bg-slate-800 hover:text-white"><i class="fa-solid fa-clock-rotate-left w-5 text-center"></i> Historique</button>
+            
+            <div class="mt-8 pt-4 border-t border-slate-800 px-4">
+                <div class="bg-slate-800 p-3 rounded-lg border border-slate-700 text-center">
+                    <p class="text-[10px] text-slate-400 uppercase font-bold mb-2">Import Données</p>
+                    <div class="flex gap-2 justify-center">
+                        <button onclick="document.getElementById('fileInput').click()" class="bg-blue-600 hover:bg-blue-500 text-white py-1.5 px-4 rounded text-xs font-bold transition"><i class="fa-solid fa-upload mr-1"></i> Excel</button>
+                    </div>
+                    <input type="file" id="fileInput" accept=".xlsx, .xls" class="hidden" onchange="handleImport(event)">
+                </div>
+            </div>
         </nav>
-        <section class="footer-section" aria-label="Contact information">
-          <h3>Contact Us</h3>
-          <p>Email: info@doglovershub.com</p>
-          <p>Phone: (555) 123-4567</p>
-        </section>
-      </div>
-      <div class="footer-bottom">
-        <p>&copy; 2025 Dog Lovers Hub. All rights reserved.</p>
-      </div>
-    </div>
-  </footer>
+    </aside>
 
-  <script src="script.js" defer></script>
+    <!-- MAIN DESKTOP -->
+    <main class="flex-1 overflow-y-auto bg-slate-50 p-6 md:p-10 relative desktop-only">
+        <header class="flex justify-between items-center mb-8">
+            <div><h2 class="text-3xl font-extrabold text-slate-900 tracking-tight" id="page-title">Analytics</h2><div class="flex items-center gap-2 mt-1"><div class="w-2.5 h-2.5 rounded-full bg-green-500 animate-pulse"></div><p class="text-sm font-medium text-slate-500">Vue active : <span id="current-machine-name" class="text-blue-600 font-bold">--</span></p></div></div>
+            <div class="hidden md:block text-right"><p class="text-xs font-bold text-slate-400 uppercase">Date système</p><p class="text-lg font-bold text-slate-800" id="date-display">--</p></div>
+        </header>
+
+        <!-- DASHBOARD ANALYTICS -->
+        <div id="dashboard" class="tab-content active">
+            <!-- KPI -->
+            <div class="grid grid-cols-1 md:grid-cols-4 gap-6 mb-8">
+                <div class="card-kpi">
+                    <div class="flex justify-between items-start mb-2"><div><p class="text-xs font-bold text-slate-400 uppercase">MTBF</p><h3 class="text-2xl font-black text-slate-800" id="kpi-mtbf">--</h3></div><div class="p-2 bg-blue-50 rounded-lg text-blue-600"><i class="fa-solid fa-heart-pulse"></i></div></div>
+                    <p class="text-[10px] text-slate-500">Moyenne Temps Bon Fonctionnement</p>
+                </div>
+                <div class="card-kpi">
+                    <div class="flex justify-between items-start mb-2"><div><p class="text-xs font-bold text-slate-400 uppercase">MTTR</p><h3 class="text-2xl font-black text-slate-800" id="kpi-mttr">--</h3></div><div class="p-2 bg-orange-50 rounded-lg text-orange-500"><i class="fa-solid fa-screwdriver-wrench"></i></div></div>
+                    <p class="text-[10px] text-slate-500">Moyenne Temps Réparation (min)</p>
+                </div>
+                <div class="card-kpi">
+                    <div class="flex justify-between items-start mb-2"><div><p class="text-xs font-bold text-slate-400 uppercase">Disponibilité</p><h3 class="text-2xl font-black text-slate-800"><span id="kpi-dispo">--</span>%</h3></div><div class="p-2 bg-green-50 rounded-lg text-green-500"><i class="fa-solid fa-check-circle"></i></div></div>
+                    <p class="text-[10px] text-slate-500">Taux opérationnel réel</p>
+                </div>
+                <div class="card-kpi border-l-4 border-l-purple-500">
+                    <div class="flex justify-between items-start mb-2"><div><p class="text-xs font-bold text-slate-400 uppercase">Taux Préventif</p><h3 class="text-2xl font-black text-slate-800"><span id="kpi-prev">--</span>%</h3></div><div class="p-2 bg-purple-50 rounded-lg text-purple-600"><i class="fa-solid fa-calendar-check"></i></div></div>
+                    <p class="text-[10px] text-slate-500">Ratio Maint. Prév / Total</p>
+                </div>
+            </div>
+
+            <!-- GRAPHIQUES -->
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6 mb-8">
+                <!-- CHART 1 : Nature d'arrêt -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-slate-800 mb-6 flex items-center gap-2"><i class="fa-solid fa-chart-pie text-blue-600"></i> Répartition par Nature d'Arrêt</h3>
+                    <div class="h-64 relative w-full">
+                        <canvas id="natureChart"></canvas>
+                    </div>
+                </div>
+
+                <!-- CHART 2 : Pareto -->
+                <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                    <h3 class="font-bold text-slate-800 mb-6 flex items-center gap-2"><i class="fa-solid fa-chart-simple text-red-600"></i> Top Causes d'Arrêt (Minutes)</h3>
+                    <div class="h-64 relative w-full">
+                        <canvas id="paretoChart"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- INFO EQUIPEMENT -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200">
+                <h3 class="font-bold text-slate-800 mb-4 text-sm uppercase tracking-wide">Fiche Technique & ABC</h3>
+                <div class="grid grid-cols-1 md:grid-cols-4 gap-4 text-sm">
+                    <div class="bg-slate-50 p-3 rounded-lg"><span class="text-xs text-slate-400 block">Référence</span><span class="font-bold" id="info-ref">--</span></div>
+                    <div class="bg-slate-50 p-3 rounded-lg"><span class="text-xs text-slate-400 block">Localisation</span><span class="font-bold" id="info-loc">--</span></div>
+                    <div class="bg-slate-50 p-3 rounded-lg"><span class="text-xs text-slate-400 block">Classe ABC</span><span class="font-bold text-red-600 bg-red-100 px-2 py-0.5 rounded text-xs" id="info-class">--</span></div>
+                    <div class="bg-slate-50 p-3 rounded-lg"><span class="text-xs text-slate-400 block">Total Arrêts (min)</span><span class="font-bold" id="info-downtime">--</span></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- AMDEC & PLAN -->
+        <div id="methods" class="tab-content">
+            <div class="flex justify-between mb-6">
+                <h2 class="text-xl font-bold">Plan Maintenance & AMDEC</h2>
+            </div>
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+                <div>
+                    <h3 class="font-bold text-slate-700 mb-4 flex items-center gap-2"><i class="fa-solid fa-calendar-check text-blue-600"></i> Planning Préventif</h3>
+                    <div id="maintenance-plan-list" class="grid gap-3 max-h-[400px] overflow-y-auto pr-2"></div>
+                </div>
+                <div>
+                    <h3 class="font-bold text-slate-700 mb-4 flex items-center gap-2"><i class="fa-solid fa-chart-bar text-red-600"></i> Analyse Criticité (AMDEC)</h3>
+                    <div class="bg-white p-4 rounded-2xl border border-slate-200 h-[400px] relative">
+                        <canvas id="amdecChart"></canvas>
+                    </div>
+                </div>
+            </div>
+            <div class="mt-8 bg-white p-6 rounded-2xl border border-slate-200">
+                <h3 class="font-bold text-red-600 mb-4 flex items-center gap-2"><i class="fa-solid fa-shield-heart"></i> Détails Modes de Défaillance</h3>
+                <ul id="amdec-list" class="grid grid-cols-1 md:grid-cols-2 gap-4"></ul>
+            </div>
+        </div>
+
+        <!-- STOCK -->
+        <div id="stock" class="tab-content">
+            <div class="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+                <h2 class="text-xl font-bold text-slate-800">Magasin Pièces</h2>
+                <div class="relative w-full md:w-64"><input type="text" id="searchStock" onkeyup="filterStock()" placeholder="Rechercher..." class="w-full pl-10 pr-4 py-2 rounded-lg border text-sm"><i class="fa-solid fa-search absolute left-3 top-2.5 text-slate-400"></i></div>
+            </div>
+            <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden"><table class="w-full text-left"><thead class="bg-slate-50 text-xs font-bold text-slate-500 uppercase"><tr><th class="p-4">Réf</th><th class="p-4">Nom</th><th class="p-4">Stock_actuel</th><th class="p-4 text-center">Stock_critique</th><th class="p-4 text-center">Etat</th><th class="p-4 text-right">Ajuster</th></tr></thead><tbody id="stock-list" class="divide-y divide-slate-100 text-sm font-medium text-slate-700"></tbody></table></div>
+        </div>
+
+        <!-- QR CONNECT -->
+        <div id="qr" class="tab-content">
+            <div class="grid grid-cols-1 lg:grid-cols-2 gap-12 items-center">
+                <div class="bg-white p-8 rounded-2xl shadow-sm border border-slate-200 flex flex-col items-center">
+                    <div id="printable-area" class="border-4 border-slate-900 p-8 rounded-xl bg-white shadow-2xl max-w-xs w-full text-center relative">
+                        <h1 class="font-black text-3xl text-slate-900 mb-4">LEAD<span class="text-blue-600">ERS</span></h1>
+                        <img id="qr-image" src="" alt="QR Code" class="w-48 h-48 mx-auto mix-blend-multiply mb-4">
+                        <p class="text-xl font-black text-slate-800" id="qr-machine-name"></p>
+                        <p class="text-sm text-slate-500 font-medium" id="qr-machine-loc"></p>
+                    </div>
+                    <button onclick="window.print()" class="mt-8 bg-slate-900 text-white px-8 py-3 rounded-lg font-bold no-print"><i class="fa-solid fa-print"></i> IMPRIMER</button>
+                </div>
+                <div class="flex flex-col items-center no-print">
+                    <h3 class="text-slate-400 text-sm font-bold uppercase tracking-widest mb-6">Simulation Vue Technicien</h3>
+                    <div class="smartphone w-[280px] h-[580px] bg-slate-800 relative shadow-2xl">
+                        <div class="smartphone-notch"></div>
+                        
+                        <!-- ÉCRAN PRINCIPAL SIMPLE -->
+                        <div id="phone-main-screen" class="bg-slate-50 h-full overflow-y-auto">
+                            <div class="bg-blue-600 p-6 pt-10 text-white rounded-b-3xl mb-4 transition-colors duration-500" id="phone-header"><p class="text-xs opacity-80">Bonjour,</p><h2 class="font-bold text-lg" id="mobile-machine-name">op123</h2></div>
+                            <div class="px-4 space-y-3">
+                                <div class="bg-white p-3 rounded-xl shadow-sm border border-slate-100 flex items-center gap-3">
+                                    <div class="w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center" id="phone-status-icon"><i class="fa-solid fa-check"></i></div>
+                                    <div class="text-sm"><p class="font-bold text-slate-700" id="phone-status-text">En Production</p></div>
+                                </div>
+                                <div class="grid grid-cols-2 gap-2">
+                                    <button onclick="openPhoneDoc()" class="bg-blue-50 p-3 rounded-xl text-center hover:bg-blue-100"><i class="fa-solid fa-list-check text-xl text-blue-600 mb-1"></i><p class="text-xs font-bold text-blue-800">Insp.</p></button>
+                                    <button onclick="playPhoneVideo()" class="bg-purple-50 p-3 rounded-xl text-center hover:bg-purple-100"><i class="fa-brands fa-youtube text-xl text-purple-600 mb-1"></i><p class="text-xs font-bold text-purple-800">Tuto</p></button>
+                                </div>
+                                <button onclick="triggerPanicMode()" class="w-full bg-red-500 text-white py-3 rounded-xl font-bold text-sm shadow-lg shadow-red-500/20 mt-4 active:scale-95 transition flex items-center justify-center gap-2"><i class="fa-solid fa-triangle-exclamation"></i> SIGNALER UNE PANNE</button>
+                            </div>
+                        </div>
+
+                        <!-- ÉCRAN VIDÉO -->
+                        <div id="phone-video-screen" class="bg-black h-full absolute top-0 left-0 w-full z-30 hidden flex flex-col">
+                            <div class="bg-slate-900 p-4 pt-10 flex items-center gap-3 text-white"><button onclick="closePhoneVideo()"><i class="fa-solid fa-arrow-left"></i></button><span class="font-bold text-sm">Tutoriel</span></div>
+                            <div class="flex-1 flex items-center justify-center"><iframe id="phone-iframe" width="100%" height="200" src="" frameborder="0" allowfullscreen></iframe></div>
+                        </div>
+
+                         <!-- ÉCRAN INSPECTION DYNAMIQUE (RESTAURÉ) -->
+                         <div id="phone-doc-screen" class="bg-white h-full absolute top-0 left-0 w-full z-30 hidden flex flex-col">
+                            <div class="bg-blue-600 p-4 pt-10 flex items-center gap-3 text-white shadow-md"><button onclick="closePhoneDoc()"><i class="fa-solid fa-arrow-left"></i></button><span class="font-bold text-sm">Plan d'Inspection</span></div>
+                            <div class="p-4 space-y-4 overflow-y-auto flex-1">
+                                <p class="text-xs text-gray-500 font-bold uppercase mb-2">Points de contrôle (PDF)</p>
+                                <div id="phone-doc-list" class="space-y-3"></div>
+                                <button onclick="closePhoneDoc(); alert('Inspection validée !')" class="w-full bg-green-600 text-white py-3 rounded-lg font-bold text-sm mt-4">VALIDER</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- HISTORIQUE AVEC AJOUT MANUEL (RESTAURÉ) -->
+        <div id="history" class="tab-content">
+            <div class="flex justify-between items-center mb-6">
+                <h2 class="text-xl font-bold text-slate-800">Historique des Interventions</h2>
+            </div>
+
+            <!-- Formulaire Ajout Manuel -->
+            <div class="bg-white p-6 rounded-2xl shadow-sm border border-slate-200 mb-8">
+                <h3 class="font-bold text-blue-600 mb-4 flex items-center gap-2"><i class="fa-solid fa-plus-circle"></i> Saisir une Intervention</h3>
+                <form onsubmit="addIntervention(event)" class="flex gap-4 items-end flex-wrap">
+                    
+                    <!-- Selecteur Machine pour l'ajout (Visible seulement si Global) -->
+                    <div class="flex-1 min-w-[200px]" id="form-machine-container">
+                        <label class="text-xs font-bold text-slate-400 uppercase mb-1 block">Sous-Ensemble</label>
+                        <select id="form-machine-select" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm text-slate-700"></select>
+                    </div>
+
+                    <div class="flex-[2] min-w-[300px]">
+                        <label class="text-xs font-bold text-slate-400 uppercase mb-1 block">Mode de Défaillance / Action</label>
+                        <input type="text" id="new-desc" placeholder="Ex: Remplacement capteur..." class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm text-slate-700 focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="w-32">
+                        <label class="text-xs font-bold text-slate-400 uppercase mb-1 block">Arrêt (min)</label>
+                        <input type="number" id="new-time" placeholder="0" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm text-slate-700 text-center font-mono focus:outline-none focus:border-blue-500">
+                    </div>
+                    <div class="w-32">
+                        <label class="text-xs font-bold text-slate-400 uppercase mb-1 block">Nature</label>
+                        <select id="new-nature" class="w-full bg-slate-50 border border-slate-300 rounded-lg p-2 text-sm text-slate-700">
+                            <option value="Mécanique">Mécanique</option>
+                            <option value="Électrique">Électrique</option>
+                            <option value="Hydraulique">Hydraulique</option>
+                            <option value="Autre">Autre</option>
+                        </select>
+                    </div>
+                    <button class="bg-blue-600 hover:bg-blue-700 text-white px-6 py-2 rounded-lg text-sm font-bold transition shadow-lg shadow-blue-500/20 h-[38px]">ENREGISTRER</button>
+                </form>
+            </div>
+
+            <div class="bg-white rounded-2xl border border-slate-200 overflow-hidden shadow-sm">
+                <div class="overflow-x-auto max-h-[500px]">
+                    <table class="w-full text-left text-sm">
+                        <thead class="bg-slate-50 text-xs uppercase sticky top-0 text-slate-500 font-bold">
+                            <tr><th class="p-4">Date</th><th class="p-4">Équipement</th><th class="p-4">Raison</th><th class="p-4">Détail</th><th class="p-4 text-right">Arrêt (min)</th><th class="p-4 text-right">Réparation (min)</th></tr>
+                        </thead>
+                        <tbody id="full-history-list" class="divide-y divide-slate-100 font-medium text-slate-700"></tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+    </main>
+
+    <!-- MOBILE RÉEL (Vue via URL) -->
+    <div id="real-mobile-view" class="p-4 flex flex-col h-screen">
+        <div class="bg-blue-600 p-6 rounded-2xl text-white shadow-lg mb-6 mt-4"><p class="text-xs opacity-80 uppercase tracking-widest">MecaPilot Mobile</p><h1 class="text-2xl font-black mt-2" id="real-mobile-title">--</h1></div>
+        <div class="flex-1 overflow-y-auto space-y-4">
+            <div class="bg-white p-4 rounded-2xl shadow-sm border border-slate-200 flex items-center justify-between"><div><p class="text-xs text-slate-400 uppercase font-bold">Statut</p><p class="font-bold text-green-600 flex items-center gap-2"><span class="w-2 h-2 bg-green-500 rounded-full animate-pulse"></span> En service</p></div><div class="w-10 h-10 bg-green-100 rounded-full flex items-center justify-center text-green-600"><i class="fa-solid fa-check"></i></div></div>
+            <div class="grid grid-cols-2 gap-4">
+                <a href="#" class="bg-blue-50 p-6 rounded-2xl flex flex-col items-center justify-center text-center hover:bg-blue-100 transition"><i class="fa-solid fa-list-check text-3xl text-blue-600 mb-2"></i><span class="font-bold text-blue-800">Insp.</span></a>
+                <a id="real-mobile-video-link" href="#" target="_blank" class="bg-purple-50 p-6 rounded-2xl flex flex-col items-center justify-center text-center hover:bg-purple-100 transition"><i class="fa-brands fa-youtube text-3xl text-purple-600 mb-2"></i><span class="font-bold text-purple-800">Tuto</span></a>
+            </div>
+            <button class="w-full bg-red-500 text-white py-4 rounded-2xl font-bold shadow-lg shadow-red-500/30 flex items-center justify-center gap-2 mt-4 active:scale-95 transition"><i class="fa-solid fa-triangle-exclamation"></i> DÉCLARER UNE PANNE</button>
+        </div>
+    </div>
+
+    <script>
+        // --- DATASET INITIAL (Données réelles extraites de Data.csv & ABC) ---
+        let machines = [
+            { id: 'GLOBAL', name: "DÉCHIQUETEUR (GLOBAL)", ref: "Ligne Complète", class: "Global", videoId: "Wd7M3XJ4wDw" },
+            { id: 'ELEC', name: "Alimentation et commande", ref: "Appareillages", class: "A", videoId: "dQw4w9WgXcQ" },
+            { id: 'CONVOYEUR', name: "Convoyeur d'alimentation", ref: "Tambours & Bande", class: "A", videoId: "9bZkp7q19f0" },
+            { id: 'CENTRALE', name: "Centrale hydraulique", ref: "Flexibles & Réservoir", class: "A", videoId: "fW8amMCVAJQ" },
+            { id: 'BROYEUR', name: "Groupe déchiqueteur", ref: "Lames", class: "A", videoId: "Wd7M3XJ4wDw" },
+            { id: 'VIS', name: "Vis de sortie", ref: "Vis sans fin", class: "B", videoId: "dQw4w9WgXcQ" }
+        ];
+
+        // CHECKLISTS PDF
+        const checklistData = {
+            'CONVOYEUR': ["Bande : Alignement & Tension", "Rouleaux : Bruit anormal", "Réducteur : Température < 60°C", "Moteur : Vibrations"],
+            'CENTRALE': ["Pression hydraulique", "Température huile", "Fuites (Raccords)", "Niveau d'huile", "Colmatage filtres"],
+            'BROYEUR': ["Lames : Usure", "Arbres : Jeu", "Paliers : Bruit", "Corps étrangers"],
+            'VIS': ["Vis : Bourrage", "Moteur : Intensité", "Bruit régulier"],
+            'ELEC': ["Armoire : Fermée", "Voyants : Pas de défaut", "Ventilation : OK"]
+        };
+
+        let dataset = [
+            { machineId: 'ELEC', equipement: "Appareillages électriques", date: "2025-02-15", raison: "Panne", mode: "Court-circuit", nature: "Électrique", arret: 40, repar: 35 },
+            { machineId: 'ELEC', equipement: "Automate", date: "2025-03-10", raison: "Panne", mode: "Défaut programme", nature: "Électrique", arret: 54, repar: 12 },
+            { machineId: 'CONVOYEUR', equipement: "Tambours", date: "2025-01-02", raison: "Panne", mode: "Usure paliers", nature: "Mécanique", arret: 72, repar: 60 },
+            { machineId: 'CONVOYEUR', equipement: "Rouleaux", date: "2025-01-20", raison: "Panne", mode: "Blocage", nature: "Mécanique", arret: 48, repar: 20 },
+            { machineId: 'CENTRALE', equipement: "Flexibles", date: "2025-02-05", raison: "Panne", mode: "Fuite huile", nature: "Hydraulique", arret: 49, repar: 15 },
+            { machineId: 'CENTRALE', equipement: "Réservoir", date: "2025-03-01", raison: "Maintenance préventive", mode: "Vidange", nature: "Hydraulique", arret: 41, repar: 40 },
+            { machineId: 'BROYEUR', equipement: "Lames", date: "2025-03-27", raison: "Maintenance préventive", mode: "Affûtage", nature: "Mécanique", arret: 40, repar: 38 },
+            { machineId: 'VIS', equipement: "Moteur", date: "2025-01-01", raison: "Panne", mode: "Surcharge", nature: "Électrique", arret: 30, repar: 60 }
+        ];
+
+        let maintenanceTasks = [
+            { machineId: 'CONVOYEUR', task: "Contrôle tension bande", freq: "JRNL", last: "Hier", status: "OK" },
+            { machineId: 'CENTRALE', task: "Vérif colmatage filtres", freq: "JRNL", last: "Hier", status: "Warning" },
+            { machineId: 'BROYEUR', task: "Contrôle jeu lames", freq: "HEBDO", last: "05/12/2025", status: "Retard" },
+            { machineId: 'ELEC', task: "Serrage borniers", freq: "SEM", last: "01/06/2025", status: "OK" },
+            { machineId: 'Vis', task: "Contrôle tension bande", freq: "MNS", last: "Hier", status: "Warning" },
+            { machineId: 'CENTRALE', task: "Vérif colmatage filtres", freq: "JRNL", last: "Hier", status: "Retard" }
+        ];
+
+        let amdecPoints = [
+            { machineId: 'CONVOYEUR', mode: "Rupture bande", crit: 4 },
+            { machineId: 'CENTRALE', mode: "Fuite Huile", crit: 4 },
+            { machineId: 'BROYEUR', mode: "Cisaillement Arbre", crit: 8 },
+            { machineId: 'ELEC', mode: "Court-circuit", crit: 16 }
+        ];
+
+        let stocks = [
+            { ref: "1001", name: "Bande", stock: 1, min: 1, unit: "Pce", Qté_Installee: 1},
+            { ref: "1002", name: "Rouleaux et stations", stock: 6, min: 4, unit: "Pce", Qté_Installee: 12 },
+            { ref: "1003", name: "Paliers de tambour", stock: 2, min: 2, unit: "Pce", Qté_Installee: 2 },
+            { ref: "1004", name: "Moteur électrique", stock: 1, min: 1, unit: "Pce", Qté_Installee: 1 },
+            { ref: "1005", name: "Réducteur", stock: 0, min: 1, unit: "Pce" , Qté_Installee: 1},
+            { ref: "1006", name: "Réservoir d'huile", stock: 1, min: 1, unit: "Kit" , Qté_Installee: 1},
+            { ref: "1007", name: "Pompe hydraulique", stock: 2, min: 1, unit: "Pce", Qté_Installee: 1},
+            { ref: "1008", name: "Arbres supports des lames", stock: 2, min: 3, unit: "Pce" , Qté_Installee: 4},
+            { ref: "1009", name: "Lames", stock: 4, min: 6, unit: "Pce" , Qté_Installee: 8},
+            { ref: "1010", name: "Arbre vis", stock: 1, min: 2, unit: "Pce", Qté_Installee: 1 },
+            { ref: "1011", name: "Appareillage électrique", stock: 2, min: 3, unit: "Pce", Qté_Installee: 1 },
+            { ref: "1012", name: "Filtres hydrauliques", stock: 1, min: 2, unit: "Kit", Qté_Installee: 1},
+            { ref: "1013", name: "Flexibles", stock: 1, min: 2, unit: "Pce", Qté_Installee: 4 },
+            { ref: "1014", name: "Moteur hydraulique", stock: 2, min: 2, unit: "Pce", Qté_Installee: 1 },
+            { ref: "1015", name: "Moteur d’entraînement", stock: 1, min: 2, unit: "Kit", Qté_Installee: 1},
+        ];
+
+        let currentMachineId = machines[0].id; // Default Global
+        let natureChartInstance = null;
+        let paretoChartInstance = null;
+        let amdecChartInstance = null;
+
+        function init() {
+            // Check Mobile Mode
+            const urlParams = new URLSearchParams(window.location.search);
+            if (urlParams.get('machine')) {
+                document.body.classList.add('mobile-mode');
+                const machine = machines.find(m => m.id === urlParams.get('machine')) || machines[0];
+                const title = document.getElementById('real-mobile-title'); if(title) title.innerText = machine.name;
+                const vidLink = document.getElementById('real-mobile-video-link'); if(vidLink) vidLink.href = https://www.youtube.com/watch?v=${machine.videoId};
+                return;
+            }
+
+            // Populate Machine Selects (Sidebar + Form)
+            const select = document.getElementById('machine-select');
+            const formSelect = document.getElementById('form-machine-select');
+            
+            [select, formSelect].forEach(sel => {
+                if(sel) {
+                    sel.innerHTML = '';
+                    machines.forEach(m => {
+                        const opt = document.createElement('option');
+                        opt.value = m.id; opt.innerText = m.name;
+                        sel.appendChild(opt);
+                    });
+                }
+            });
+
+            document.getElementById('date-display').innerText = new Date().toLocaleDateString();
+            refreshData();
+            renderStock();
+        }
+
+        function changeMachine() {
+            currentMachineId = document.getElementById('machine-select').value;
+            refreshData();
+        }
+
+        function refreshData() {
+            let machine = machines.find(m => m.id === currentMachineId);
+            const isGlobal = currentMachineId === 'GLOBAL';
+
+            // Update UI Labels
+            const setText = (id, val) => { const el = document.getElementById(id); if(el) el.innerText = val; };
+            setText('current-machine-name', machine.name);
+            setText('info-ref', machine.ref);
+            setText('info-class', machine.class);
+            setText('qr-machine-name', machine.name); 
+
+            const formMachineContainer = document.getElementById('form-machine-container');
+            if(formMachineContainer) formMachineContainer.style.display = isGlobal ? 'block' : 'none';
+
+            // Filter Data based on Global or Specific
+            const mData = isGlobal ? dataset : dataset.filter(d => d.machineId === currentMachineId);
+            const mTasks = isGlobal ? maintenanceTasks : maintenanceTasks.filter(t => t.machineId === currentMachineId);
+            const mAmdec = isGlobal ? amdecPoints : amdecPoints.filter(a => a.machineId === currentMachineId);
+
+            // --- KPI CALCULATIONS ---
+            const totalInter = mData.length;
+            const prevInter = mData.filter(d => d.raison.toLowerCase().includes("préventive")).length;
+            const tauxPrev = totalInter > 0 ? ((prevInter / totalInter) * 100).toFixed(1) : 0;
+            
+            // Panne only for MTBF/MTTR
+            const pannes = mData.filter(d => d.raison === "Panne");
+            const totalRepar = pannes.reduce((acc, c) => acc + (c.repar || 0), 0);
+            const mttr = pannes.length > 0 ? (totalRepar / pannes.length).toFixed(0) : 0;
+            
+            const totalArret = pannes.reduce((acc, c) => acc + (c.arret || 0), 0);
+            const opening = 43200; 
+            const mtbf = pannes.length > 0 ? ((opening - totalArret) / pannes.length).toFixed(0) : opening;
+            const dispo = ((opening - totalArret) / opening * 100).toFixed(2);
+
+            setText('kpi-prev', tauxPrev);
+            setText('kpi-mttr', mttr);
+            setText('kpi-mtbf', mtbf);
+            setText('kpi-dispo', dispo);
+            setText('info-downtime', mData.reduce((acc, c) => acc + (c.arret || 0), 0));
+
+            // --- QR CODE ---
+            const mobileUrl = window.location.href.split('?')[0] + '?machine=' + machine.id;
+            const qrImg = document.getElementById('qr-image');
+            if(qrImg) qrImg.src = https://api.qrserver.com/v1/create-qr-code/?size=200x200&data=${encodeURIComponent(mobileUrl)};
+            const mobLink = document.getElementById('mobile-link-sim');
+            if(mobLink) { mobLink.innerText = mobileUrl; mobLink.href = mobileUrl; }
+
+            // --- LISTS ---
+            const hList = document.getElementById('full-history-list');
+            if(hList) {
+                hList.innerHTML = '';
+                mData.forEach(d => {
+                    hList.innerHTML += <tr class="hover:bg-slate-50"><td class="p-4 text-slate-500">${d.date}</td><td class="p-4 font-bold text-xs">${d.equipement} (${d.machineId})</td><td class="p-4"><span class="px-2 py-1 rounded-full text-[10px] ${d.raison === 'Panne' ? 'bg-red-100 text-red-700' : 'bg-blue-100 text-blue-700'}">${d.raison}</span></td><td class="p-4 text-xs">${d.nature} - ${d.mode}</td><td class="p-4 text-right font-mono font-bold">${d.arret}</td><td class="p-4 text-right text-gray-400 text-xs">${d.repar}</td></tr>;
+                });
+            }
+
+            const pList = document.getElementById('maintenance-plan-list');
+            if(pList) {
+                pList.innerHTML = '';
+                if(mTasks.length === 0) pList.innerHTML = '<div class="text-slate-400 italic p-4 text-center">Aucune tâche</div>';
+                else mTasks.forEach(t => {
+                    let c = t.status === "OK" ? "green" : t.status === "Warning" ? "orange" : "red";
+                    pList.innerHTML += <div class="bg-white p-3 rounded-lg border flex justify-between items-center"><div class="flex items-center gap-3"><div class="w-8 h-8 rounded-full bg-blue-50 flex justify-center items-center text-blue-600"><i class="fa-solid fa-wrench text-xs"></i></div><div><h4 class="font-bold text-slate-700 text-sm">${t.task}</h4><p class="text-[10px] text-slate-400 font-bold">${t.freq} (${t.machineId})</p></div></div><span class="bg-${c}-100 text-${c}-700 px-2 py-1 rounded-full text-[10px] font-bold">${t.status}</span></div>;
+                });
+            }
+
+            const aList = document.getElementById('amdec-list');
+            if(aList) {
+                aList.innerHTML = '';
+                mAmdec.forEach(a => {
+                    aList.innerHTML += <li class="bg-red-50 p-3 rounded-lg border border-red-100 flex justify-between"><span class="font-medium text-red-900 text-sm">${a.mode} (${a.machineId})</span><span class="font-bold text-red-800">C=${a.crit}</span></li>;
+                });
+            }
+
+            // --- CHARTS ---
+            updateCharts(mData);
+            updateAmdecChart(mAmdec);
+        }
+
+        // --- ADD INTERVENTION ---
+        function addIntervention(e) {
+            e.preventDefault();
+            const desc = document.getElementById('new-desc').value;
+            const time = parseFloat(document.getElementById('new-time').value) || 0;
+            const nature = document.getElementById('new-nature').value;
+            
+            let targetMachineId = currentMachineId;
+            if (currentMachineId === 'GLOBAL') {
+                targetMachineId = document.getElementById('form-machine-select').value;
+                if(targetMachineId === 'GLOBAL') { alert("Veuillez choisir une machine spécifique pour l'intervention."); return; }
+            }
+
+            if(desc && time > 0) {
+                dataset.push({
+                    machineId: targetMachineId,
+                    equipement: "Saisie Manuelle", 
+                    date: new Date().toLocaleDateString(),
+                    raison: "Panne", 
+                    mode: desc,
+                    nature: nature,
+                    arret: time,
+                    repar: time 
+                });
+                refreshData();
+                document.getElementById('new-desc').value = '';
+                document.getElementById('new-time').value = '';
+                alert("Intervention enregistrée et KPI mis à jour !");
+            }
+        }
+
+        // --- STOCKS & CHARTS HELPERS ---
+        function renderStock(filterText = "") {
+            const sList = document.getElementById('stock-list'); if(!sList) return; sList.innerHTML = '';
+            stocks.forEach((s, index) => {
+                if(filterText && !s.name.toLowerCase().includes(filterText.toLowerCase()) && !s.ref.toLowerCase().includes(filterText.toLowerCase())) return;
+                const isLow = s.stock < s.min;
+                const badge = isLow ? '<span class="px-2 py-1 rounded-full text-xs font-bold bg-red-100 text-red-700 flex w-fit mx-auto gap-1"><i class="fa-solid fa-triangle-exclamation"></i> Rupture</span>' : '<span class="px-2 py-1 rounded-full text-xs font-bold bg-green-100 text-green-700 flex w-fit mx-auto gap-1"><i class="fa-solid fa-check"></i> OK</span>';
+                sList.innerHTML += <tr class="hover:bg-slate-50 transition ${isLow ? 'bg-red-50/50' : ''}"><td class="p-4 font-mono text-xs text-slate-500 font-bold">${s.ref}</td><td class="p-4 font-bold text-slate-700">${s.name}</td><td class="p-4 text-center"><span class="font-bold text-lg ${isLow ? 'text-red-600' : 'text-slate-800'}">${s.stock}</span><span class="text-xs text-slate-400 ml-1">${s.unit}</span></td><td class="p-4 text-center text-slate-400 text-xs">${s.min}</td><td class="p-4 text-center">${badge}</td><td class="p-4 text-right flex justify-end gap-2"><button onclick="updateStock(${index}, -1)" class="w-8 h-8 rounded bg-slate-200 hover:bg-red-200 text-slate-600 hover:text-red-600 flex justify-center items-center"><i class="fa-solid fa-minus"></i></button><button onclick="updateStock(${index}, 1)" class="w-8 h-8 rounded bg-slate-200 hover:bg-blue-200 text-slate-600 hover:text-blue-600 flex justify-center items-center"><i class="fa-solid fa-plus"></i></button></td></tr>;
+            });
+        }
+        function filterStock() { renderStock(document.getElementById('searchStock').value); }
+        function updateStock(i, a) { stocks[i].stock += a; if(stocks[i].stock < 0) stocks[i].stock = 0; renderStock(document.getElementById('searchStock').value); }
+
+        function updateCharts(data) {
+            const natures = {};
+            data.forEach(d => { natures[d.nature] = (natures[d.nature] || 0) + (d.arret || 0); }); // Weighted by time
+            
+            const ctxNature = document.getElementById('natureChart');
+            if(natureChartInstance) natureChartInstance.destroy();
+            natureChartInstance = new Chart(ctxNature, {
+                type: 'doughnut',
+                data: {
+                    labels: Object.keys(natures),
+                    datasets: [{
+                        data: Object.values(natures),
+                        backgroundColor: ['#3b82f6', '#f97316', '#ef4444', '#10b981'],
+                        borderWidth: 0
+                    }]
+                },
+                options: { 
+                    responsive: true, 
+                    maintainAspectRatio: false,
+                    plugins: { 
+                        legend: { position: 'right', labels: { boxWidth: 10, font: { size: 10 } } },
+                        title: { display: false }
+                    }
+                }
+            });
+
+            // Pareto Chart (Modes)
+            const modes = {};
+            data.forEach(d => { if(d.raison==='Panne') modes[d.mode] = (modes[d.mode] || 0) + (d.arret || 0); });
+            const sortedModes = Object.entries(modes).sort((a, b) => b[1] - a[1]).slice(0, 6);
+            
+            const ctxPareto = document.getElementById('paretoChart');
+            if(paretoChartInstance) paretoChartInstance.destroy();
+            paretoChartInstance = new Chart(ctxPareto, {
+                type: 'bar',
+                data: {
+                    labels: sortedModes.map(x => x[0]),
+                    datasets: [{
+                        label: 'Durée Arrêt (min)',
+                        data: sortedModes.map(x => x[1]),
+                        backgroundColor: '#64748b',
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    indexAxis: 'y',
+                    plugins: { legend: { display: false } },
+                    scales: { x: { beginAtZero: true } }
+                }
+            });
+        }
+
+        function updateAmdecChart(data) {
+            const ctx = document.getElementById('amdecChart'); if(!ctx) return;
+            // Sort by Crit and take top 8
+            const sortedData = [...data].sort((a, b) => b.crit - a.crit).slice(0,8);
+            const labels = sortedData.map(d => d.mode.substring(0, 15) + "...");
+            const values = sortedData.map(d => d.crit);
+
+            if (amdecChartInstance) amdecChartInstance.destroy();
+
+            amdecChartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: labels,
+                    datasets: [{
+                        label: 'Criticité (C)',
+                        data: values,
+                        backgroundColor: values.map(v => v > 12 ? '#ef4444' : '#f59e0b'),
+                        borderRadius: 4
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { display: false } },
+                    scales: { y: { beginAtZero: true, max: 20 } }
+                }
+            });
+        }
+
+        // --- MOBILE VIDEO & DOCS & ALERTE ---
+        function playPhoneVideo() { 
+            const machine = machines.find(m => m.id === currentMachineId); 
+            const vidId = (machine && machine.videoId) ? machine.videoId : 'dQw4w9WgXcQ';
+            document.getElementById('phone-iframe').src = https://www.youtube.com/embed/${vidId}?autoplay=1; 
+            document.getElementById('phone-main-screen').classList.add('hidden'); 
+            document.getElementById('phone-video-screen').classList.remove('hidden'); 
+        }
+        function closePhoneVideo() { document.getElementById('phone-iframe').src = ""; document.getElementById('phone-video-screen').classList.add('hidden'); document.getElementById('phone-main-screen').classList.remove('hidden'); }
+        
+        function openPhoneDoc() { 
+            document.getElementById('phone-main-screen').classList.add('hidden'); 
+            document.getElementById('phone-doc-screen').classList.remove('hidden'); 
+            
+            const docList = document.getElementById('phone-doc-list');
+            if (docList) {
+    docList.innerHTML = '';
+
+    const checks = checklistData[currentMachineId] || [
+        "Mesurer la température de réducteur",
+        "Vérifier serrage des Lames",
+        "Verifier s'il y'a un bruit",
+        "Nettoyage filtres d’aspiration",
+        "Verifier l'alignement",
+        "Voir s'il y'a un fuite",
+        "Verifier s'il y'a une vibration",
+        "Contrôler le niveau d’huile de réducteur",
+        "Vérifier état accouplement (jeu, fissures)",
+        "Contrôle fixation d'Extracteur",
+        "Voir s'il y'a un fuite",
+        "Contrôler jeu paliers et alignement",
+        "Vérification étanchéité",
+    ];
+
+    checks.forEach(check => {
+        docList.innerHTML += `
+            <label class="flex items-center gap-3 p-3 border rounded-lg hover:bg-gray-50 cursor-pointer">
+                <input type="checkbox" class="w-5 h-5 text-blue-600 rounded">
+                <span class="text-sm font-medium text-slate-700">${check}</span>
+            </label>`;
+    });
+}
+
+        }
+        function closePhoneDoc() { document.getElementById('phone-doc-screen').classList.add('hidden'); document.getElementById('phone-main-screen').classList.remove('hidden'); }
+
+        function triggerPanicMode() { 
+            const head = document.getElementById('phone-header'); if(head) head.classList.replace('bg-blue-600', 'bg-red-600');
+            const stText = document.getElementById('phone-status-text'); if(stText) { stText.innerText = "ARRÊT URGENCE"; stText.className = "font-bold text-red-600"; }
+            const icon = document.getElementById('phone-status-icon'); if(icon) { icon.className = "w-8 h-8 rounded-full bg-red-100 text-red-600 flex items-center justify-center animate-pulse"; icon.innerHTML = '<i class="fa-solid fa-triangle-exclamation"></i>'; }
+            
+            // Use the Helper Function setText for Global Alert to avoid ReferenceError
+            const setText = (id, val) => { const el = document.getElementById(id); if(el) el.innerText = val; };
+            
+            const machine = machines.find(m => m.id === currentMachineId);
+            setText('alert-machine-name', machine ? machine.name : 'Inconnu'); 
+            document.getElementById('global-alert-bar').classList.remove('hidden'); 
+        }
+        function acknowledgeAlert() { 
+            document.getElementById('global-alert-bar').classList.add('hidden'); 
+            const head = document.getElementById('phone-header'); if(head) head.classList.replace('bg-red-600', 'bg-blue-600');
+            const stText = document.getElementById('phone-status-text'); if(stText) { stText.innerText = "En Production"; stText.className = "font-bold text-green-600"; }
+            const icon = document.getElementById('phone-status-icon'); if(icon) { icon.className = "w-8 h-8 rounded-full bg-green-100 text-green-600 flex items-center justify-center"; icon.innerHTML = '<i class="fa-solid fa-check"></i>'; }
+            alert("Alerte acquittée."); 
+        }
+
+        // --- UTILS ---
+        function switchTab(id) { document.querySelectorAll('.tab-content').forEach(e => e.classList.remove('active')); document.querySelectorAll('.nav-btn').forEach(e => { e.classList.remove('active'); e.classList.remove('text-white'); e.classList.add('text-slate-400'); }); document.getElementById(id).classList.add('active'); const btn = document.getElementById('btn-' + id); if(btn) { btn.classList.add('active'); btn.classList.remove('text-slate-400'); btn.classList.add('text-white'); } }
+        
+        // Admin Helpers
+        function downloadTemplate() { const wb = XLSX.utils.book_new(); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(machines), "Machines"); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(stocks), "Stocks"); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(dataset), "Historique"); XLSX.utils.book_append_sheet(wb, XLSX.utils.json_to_sheet(maintenanceTasks), "Planning"); XLSX.writeFile(wb, "Modele.xlsx"); }
+        function handleImport(e) { const f = e.target.files[0]; if(!f) return; const r = new FileReader(); r.onload = function(e) { const d = new Uint8Array(e.target.result); const w = XLSX.read(d, {type: 'array'}); if(w.Sheets["Stocks"]) stocks = XLSX.utils.sheet_to_json(w.Sheets["Stocks"]); if(w.Sheets["Machines"]) { machines = XLSX.utils.sheet_to_json(w.Sheets["Machines"]); init(); } if(w.Sheets["Historique"]) dataset = XLSX.utils.sheet_to_json(w.Sheets["Historique"]); if(w.Sheets["Planning"]) maintenanceTasks = XLSX.utils.sheet_to_json(w.Sheets["Planning"]); alert("Import OK !"); refreshData(); renderStock(); }; r.readAsArrayBuffer(f); }
+
+        init();
+    </script>
 </body>
 </html>
